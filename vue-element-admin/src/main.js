@@ -33,6 +33,8 @@ if (process.env.NODE_ENV === 'production') {
   mockXHR()
 }
 
+// 使用Vue.use注册的插件无法使用webpack的externals
+// 这是一个优化空间
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size
   locale: enLang // 如果使用中文，无需设置，请删除

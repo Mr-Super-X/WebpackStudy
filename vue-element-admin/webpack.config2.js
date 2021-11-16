@@ -6,7 +6,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const BundleAnalyzerPlugin =
   require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
 const webpack = require("webpack");
 const path = require("path");
 
@@ -90,7 +90,7 @@ const config = {
     // 我们想分的chunk和最终生成的chunk文件之间的关系可以在生成的文件中查看
     // 编写ssr程序非常重要，因为每次打包后的文件名都不同，因此我们需要一个映射关系
     new WebpackManifestPlugin({
-      filename: 'meta/manifest.json'
+      filename: "meta/manifest.json",
     }),
     // 必要：配合vue-loader使用才能正确工作
     new VueLoaderPlugin(),
@@ -151,7 +151,19 @@ const config = {
     echarts: "echarts", // 将echarts使用echarts全局变量来代替
     xlsx: "XLSX", // 将xlsx使用XLSX全局变量来代替
     jquery: "jQuery", // 将jquery使用jQuery全局变量来代替(package.json中没有该依赖，应该在第三方插件的依赖中)
+
+    // 这个库有问题，这样配置可以从bundle中去除mockjs，本项目中通过const Mock = require('mockjs')引入，
+    // 使用cdn引入后打包成功，页面会报错Cannot read properties of undefined (reading 'mock')
+    // 估计和mockjs的导出方式有关，导致bundle分包时没有拿到mock属性
+    // mockjs: {
+    //   // 需要按这种方式配置才能生效
+    //   commonjs: "Mock", // 如果我们的库运行在Node.js环境中，import Mock from 'mockjs'等价于const Mock = require('mockjs')
+    //   commonjs2: "Mock", // 同上
+    //   amd: "Mock", // 如果我们的库使用require.js等加载,等价于 define(["Mock"], factory);
+    //   root: "Mock", // 如果我们的库在浏览器中使用，需要提供一个全局的变量‘Mock’，等价于 var Mock = (window.Mock) or (Mock);
+    // },
     "js-cookie": "Cookies", // 将js-cookie使用Cookies全局变量来代替
+    "tui-editor": "Editor", // 将tui-editor使用Editor全局变量来代替
   },
   // 优化策略配置
   optimization: {
@@ -201,7 +213,7 @@ const config = {
     path: path.resolve(__dirname, "dist"),
     // 输出的文件名
     filename: "[name].[contenthash:8].bundle.js",
-    chunkFilename: "chunk.[id].[contenthash:8].js"
+    chunkFilename: "chunk.[id].[contenthash:8].js",
   },
 };
 
