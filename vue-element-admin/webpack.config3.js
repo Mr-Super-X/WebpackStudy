@@ -1,12 +1,12 @@
 // 优化webpack打包策略
-// 终端使用运行命令：webpack --config ./webpack.config2.js
+// 终端使用运行命令：webpack --config ./webpack.config3.js --mode production
 const VueLoaderPlugin = require("vue-loader/lib/plugin"); // 解析.vue文件插件
 const HtmlWebpackPlugin = require("html-webpack-plugin"); // 打包文件自动注入html插件
 const CopyPlugin = require("copy-webpack-plugin"); // 拷贝插件
 const MiniCssExtractPlugin = require("mini-css-extract-plugin"); // css样式分离插件
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin'); // 引入打包加速插件
-const CompressionPlugin = require('compression-webpack-plugin'); // gzip压缩插件
-const ProgressBarPlugin = require('progress-bar-webpack-plugin'); // 打包进度插件
+const HardSourceWebpackPlugin = require("hard-source-webpack-plugin"); // 引入打包加速插件
+const CompressionPlugin = require("compression-webpack-plugin"); // gzip压缩插件
+const ProgressBarPlugin = require("progress-bar-webpack-plugin"); // 打包进度插件
 const BundleAnalyzerPlugin =
   require("webpack-bundle-analyzer").BundleAnalyzerPlugin; // bundle分析插件
 const { CleanWebpackPlugin } = require("clean-webpack-plugin"); // 自动清除打包文件插件
@@ -14,9 +14,11 @@ const { WebpackManifestPlugin } = require("webpack-manifest-plugin"); // chunk�
 const webpack = require("webpack");
 const path = require("path");
 
+const prodMode = "production"; // 生产模式
+
 const config = {
   entry: "./src/main.js",
-  mode: "production",
+  mode: prodMode,
   resolve: {
     extensions: [".mjs", ".js", ".json", ".vue"],
     alias: {
@@ -72,8 +74,12 @@ const config = {
         use: [
           // 将css提取出来单独进行缓存
           // 需配合MiniCssExtractPlugin使用
-          MiniCssExtractPlugin.loader,
-          // "style-loader",
+          // 对于开发模式(包括webpack-dev-server)，你可以使用style-loader，因为它使用多个<style></style>将CSS注入到DOM中，工作速度更快。
+          // prodMode === "production" ? MiniCssExtractPlugin.loader : "style-loader",
+          // 这个项目可能是因为使用全局Vue.use注册了elementui，使用MiniCssExtractPlugin.loader会导致报错
+          // Cannot read properties of undefined (reading 'theme')
+          // 使用style-loader是正常的
+          "style-loader",
           "css-loader",
           {
             loader: "sass-loader",
@@ -121,7 +127,7 @@ const config = {
     }),
     // 通过合并小于 minChunkSize 大小的 chunk，将 chunk 体积保持在指定大小限制以上。
     new webpack.optimize.MinChunkSizePlugin({
-      minChunkSize: 10000 // Minimum number of characters
+      minChunkSize: 10000, // Minimum number of characters
     }),
     // 将打包后的文件自动插入到页面上
     new HtmlWebpackPlugin({
@@ -168,7 +174,7 @@ const config = {
     new CompressionPlugin({
       test: /\.js$|\.html$|\.css/, // 匹配文件名
       threshold: 10240, // 对超过10kb的数据进行压缩
-      deleteOriginalAssets: false // 是否删除原文件
+      deleteOriginalAssets: false, // 是否删除原文件
     }),
   ],
   // 使用externals减小bundle打包体积
@@ -229,7 +235,7 @@ const config = {
           minChunks: 3, //  minimum common number
           priority: 5,
           reuseExistingChunk: true,
-        },
+        }
       },
     },
     // runtime维护了一个模块之间的映射关系，这个映射关系可能每次打包都会变化
