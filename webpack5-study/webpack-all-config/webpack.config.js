@@ -5,8 +5,8 @@
  * @Contact: 1303232158@qq.com
  * @Date: 2022-04-20 19:07:23
  * @LastEditors: Mr.Mikey
- * @LastEditTime: 2022-04-22 12:53:20
- * @FilePath: \webpack-study\06.webpack-PWA\webpack.config.js
+ * @LastEditTime: 2022-04-22 14:06:32
+ * @FilePath: \webpack5-study\webpack-all-config\webpack.config.js
  */
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');

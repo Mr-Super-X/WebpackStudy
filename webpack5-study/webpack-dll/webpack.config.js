@@ -5,8 +5,8 @@
  * @Contact: 1303232158@qq.com
  * @Date: 2022-04-20 19:07:23
  * @LastEditors: Mr.Mikey
- * @LastEditTime: 2022-04-21 19:46:08
- * @FilePath: \webpack-study\07.webpack-dll\webpack.config.js
+ * @LastEditTime: 2022-04-22 14:06:45
+ * @FilePath: \webpack5-study\webpack-dll\webpack.config.js
  */
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -17,7 +17,7 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 const AddAssetHtmlWebpackPlugin = require('add-asset-html-webpack-plugin');
 const webpack = require('webpack');
 const glob = require('glob');
-const { resolve, join } = require('path');
+const { resolve, join } = require('path'); 
 
 /**
  * HRM：hot module replacement 模块热更新
