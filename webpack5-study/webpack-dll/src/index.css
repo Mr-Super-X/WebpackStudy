@@ -1,0 +1,26 @@
+#app {
+  font-size: 30px;
+  font-weight: 600;
+  background-color: pink;
+  display: flex;
+  backface-visibility: hidden;
+}
+
+.box1 {
+  width: 100px;
+  height: 100px;
+  background: url(./amazed.png);
+  background-size: 100% 100%;
+}
+
+.box2 {
+  width: 200px;
+  height: 200px;
+  background: url(./Aviao.png);
+  background-size: 100% 100%;
+}
+
+/* 测试，该样式未使用，会被purgcss-plugin删除 */
+.a {
+  color: #333;
+}
